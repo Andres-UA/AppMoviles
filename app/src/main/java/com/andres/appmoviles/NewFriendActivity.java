@@ -4,12 +4,15 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.andres.appmoviles.db.DBHandler;
 import com.andres.appmoviles.model.Friend;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class NewFriendActivity extends AppCompatActivity {
@@ -21,10 +24,15 @@ public class NewFriendActivity extends AppCompatActivity {
 
     private Button btnSaveFriend;
 
+    DBHandler db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_friend);
+
+        db = DBHandler.getInstance(this);
+
         etName = findViewById(R.id.et_name);
         etAge = findViewById(R.id.et_age);
         etEmail = findViewById(R.id.et_email);
@@ -36,6 +44,13 @@ public class NewFriendActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Friend friend = new Friend(UUID.randomUUID().toString(), etName.getText().toString(), etAge.getText().toString(), etPhone.getText().toString(), etEmail.getText().toString());
                 // Agregar amigo a DB local
+                db.createFriend(friend);
+
+                ArrayList<Friend> friends = db.getAllFriend();
+
+                for (int i = 0; i < friends.size(); i++) {
+                    Log.e(">>>", friends.get(i).getName());
+                }
 
             }
         });
