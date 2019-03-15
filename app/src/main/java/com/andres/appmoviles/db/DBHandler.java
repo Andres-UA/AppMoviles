@@ -1,10 +1,13 @@
 package com.andres.appmoviles.db;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.andres.appmoviles.model.Friend;
+
+import java.util.ArrayList;
 
 public class DBHandler extends SQLiteOpenHelper {
 
@@ -52,6 +55,28 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("INSERT INTO " + FRIENDS_TABLE + " (" + FRIENDS_ID + ", " + FRIENDS_NAME + ", " + FRIENDS_AGE + ", " + FRIENDS_PHONE + ", " + FRIENDS_EMAIL + ") VALUES ('" + friend.getId() + "','" + friend.getName() + "','" + friend.getAge() + "','" + friend.getPhone() + "','" + friend.getEmail() + "')");
         db.close();
+    }
+
+    // Leer
+    public ArrayList<Friend> getAllFriend() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ArrayList<Friend> friends = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + FRIENDS_TABLE, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                Friend friend = new Friend();
+                friend.setId(cursor.getString(cursor.getColumnIndex(FRIENDS_ID)));
+                friend.setName(cursor.getString(cursor.getColumnIndex(FRIENDS_NAME)));
+                friend.setAge(cursor.getString(cursor.getColumnIndex(FRIENDS_AGE)));
+                friend.setPhone(cursor.getString(cursor.getColumnIndex(FRIENDS_PHONE)));
+                friend.setEmail(cursor.getString(cursor.getColumnIndex(FRIENDS_EMAIL)));
+
+                friends.add(friend);
+            } while (cursor.moveToNext());
+        }
+        db.close();
+        return friends;
     }
 
 }
