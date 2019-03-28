@@ -20,4 +20,14 @@
         android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp"
         android:id="@+id/btn_add_new_friend"/>
+
+    <Button
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:text="X"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/btn_signout"/>
+
 </RelativeLayout>

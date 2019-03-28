@@ -1,5 +1,7 @@
 package com.andres.appmoviles.model;
 
+import java.lang.reflect.Field;
+
 public class Friend {
     private String id;
     private String name;
@@ -58,4 +60,13 @@ public class Friend {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Friend) {
+            return this.id.equals(((Friend) obj).id);
+        }
+        return false;
+    }
+
 }
