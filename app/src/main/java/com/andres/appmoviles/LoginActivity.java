@@ -17,9 +17,9 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText et_login_correo;
-    private EditText et_login_pass;
-    private Button btn_login_login;
+    private EditText et_login_email;
+    private EditText et_login_password;
+    private Button btn_login;
     private TextView txt_singup;
     FirebaseAuth auth;
 
@@ -29,17 +29,17 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         auth = FirebaseAuth.getInstance();
 
-        et_login_correo = findViewById(R.id.et_login_correo);
-        et_login_pass = findViewById(R.id.et_login_pass);
-        btn_login_login = findViewById(R.id.btn_login_login);
+        et_login_email = findViewById(R.id.et_login_email);
+        et_login_password = findViewById(R.id.et_login_password);
+        btn_login = findViewById(R.id.btn_login);
         txt_singup = findViewById(R.id.txt_singup);
 
-        btn_login_login.setOnClickListener(new View.OnClickListener() {
+        btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String correo = et_login_correo.getText().toString();
-                String pass = et_login_pass.getText().toString();
-                auth.signInWithEmailAndPassword(correo, pass).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                String email = et_login_email.getText().toString();
+                String password = et_login_password.getText().toString();
+                auth.signInWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult authResult) {
                         Intent i = new Intent(LoginActivity.this, MainActivity.class);

@@ -18,9 +18,10 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class SingupActivity extends AppCompatActivity {
 
-    private EditText et_singup_correo;
-    private EditText et_singup_pass, et_singup_repass;
-    private Button btn_singup_singup;
+    private EditText et_singup_email;
+    private EditText et_singup_password;
+    private EditText et_singup_repassword;
+    private Button btn_singup;
     private TextView txt_login;
     FirebaseAuth auth;
 
@@ -31,18 +32,18 @@ public class SingupActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
 
-        et_singup_correo = findViewById(R.id.et_signup_correo);
-        et_singup_pass = findViewById(R.id.et_signup_pass);
-        et_singup_repass = findViewById(R.id.et_signup_repass);
-        btn_singup_singup = findViewById(R.id.btn_signup_singup);
+        et_singup_email = findViewById(R.id.et_signup_email);
+        et_singup_password = findViewById(R.id.et_signup_password);
+        et_singup_repassword = findViewById(R.id.et_signup_repassword);
+        btn_singup = findViewById(R.id.btn_signup);
         txt_login = findViewById(R.id.txt_login);
 
-        btn_singup_singup.setOnClickListener(new View.OnClickListener() {
+        btn_singup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String correo = et_singup_correo.getText().toString();
-                String pass = et_singup_pass.getText().toString();
-                String repass = et_singup_repass.getText().toString();
+                String correo = et_singup_email.getText().toString();
+                String pass = et_singup_password.getText().toString();
+                String repass = et_singup_repassword.getText().toString();
 
                 if (pass.equals(repass)) {
                     auth.createUserWithEmailAndPassword(correo, pass).addOnSuccessListener(new OnSuccessListener<AuthResult>() {

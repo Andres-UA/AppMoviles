@@ -9,20 +9,20 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/et_signup_correo"
+        android:id="@+id/et_signup_email"
         android:hint="Correo"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/et_signup_pass"
+        android:id="@+id/et_signup_password"
         android:inputType="textPassword"
         android:hint="Contraseña"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/et_signup_repass"
+        android:id="@+id/et_signup_repassword"
         android:inputType="textPassword"
         android:hint="Contraseña"/>
 
@@ -30,7 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:id="@+id/btn_signup_singup"
+        android:id="@+id/btn_signup"
         android:text="Registrarse"/>
 
     <TextView
