@@ -1,0 +1,44 @@
+{
+  "project_info": {
+    "project_number": "886704551098",
+    "firebase_url": "https://appmoviles-3b933.firebaseio.com",
+    "project_id": "appmoviles-3b933",
+    "storage_bucket": "appmoviles-3b933.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:886704551098:android:f9cfd0b83fdec2ff",
+        "android_client_info": {
+          "package_name": "com.andres.appmoviles"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "886704551098-lethhn3snpca05jlrgv018h2sf34d3nd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.andres.appmoviles",
+            "certificate_hash": "4826c3115ca595fb09bda15d267141be38245de8"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5JVtZ6fJm_gH0Gn55BTuydCPl8XbPZog"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "886704551098-3gro2lta9tet8ua70n967sn0ptiu7v32.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

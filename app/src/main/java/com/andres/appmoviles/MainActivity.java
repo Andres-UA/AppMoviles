@@ -12,6 +12,7 @@ import android.widget.Button;
 
 import com.andres.appmoviles.db.DBHandler;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,10 +24,14 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth auth;
     private Button btn_signout;
 
+    FirebaseDatabase rtdb;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        rtdb = FirebaseDatabase.getInstance();
 
         ActivityCompat.requestPermissions(this, new String[]{
                 Manifest.permission.CALL_PHONE,

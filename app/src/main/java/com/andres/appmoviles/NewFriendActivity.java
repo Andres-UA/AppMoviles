@@ -10,6 +10,7 @@ import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +21,8 @@ import android.widget.ImageView;
 
 import com.andres.appmoviles.db.DBHandler;
 import com.andres.appmoviles.model.Friend;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -39,13 +42,17 @@ public class NewFriendActivity extends AppCompatActivity {
 
     private File photoFile;
 
-
+    FirebaseDatabase rtdb;
+    FirebaseAuth auth;
     DBHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_friend);
+
+        rtdb = FirebaseDatabase.getInstance();
+        auth = FirebaseAuth.getInstance();
 
         // Si no pongo esto entonces va a salir el URIFileExposedException
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
@@ -64,14 +71,15 @@ public class NewFriendActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Friend friend = new Friend(UUID.randomUUID().toString(), etName.getText().toString(), etAge.getText().toString(), etPhone.getText().toString(), etEmail.getText().toString());
+
                 // Agregar amigo a DB local
                 db.createFriend(friend);
 
-                ArrayList<Friend> friends = db.getAllFriend();
+                // Agregar amigo en Firebase
+                String uid = auth.getCurrentUser().getUid();
+                rtdb.getReference().child("friends").child(uid).push().setValue(friend);
 
-                for (int i = 0; i < friends.size(); i++) {
-                    Log.e(">>>", friends.get(i).getName());
-                }
+                finish();
 
             }
         });
@@ -82,7 +90,8 @@ public class NewFriendActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 photoFile = new File(Environment.getExternalStorageDirectory() + "/" + UUID.randomUUID().toString() + ".png");
-                Uri uri = Uri.fromFile(photoFile);
+                //Uri uri = Uri.fromFile(photoFile);
+                Uri uri = FileProvider.getUriForFile(NewFriendActivity.this, getPackageName(), photoFile);
                 i.putExtra(MediaStore.EXTRA_OUTPUT, uri);
                 startActivityForResult(i, CAMERA_CALLBACK_ID);
             }
