@@ -1,7 +1,9 @@
 package com.andres.appmoviles;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,20 +13,20 @@ import android.view.View;
 import android.widget.Button;
 
 import com.andres.appmoviles.db.DBHandler;
+import com.andres.appmoviles.model.Friend;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements FriendsListAdapter.OnItemClickListener {
 
     private Button btnNewFriend;
     private RecyclerView rvFriendsList;
-
-    DBHandler localdb;
-    private FriendsListApdapter adapterAmigos;
-    FirebaseAuth auth;
+    private FriendsListAdapter friendsAdapter;
     private Button btn_signout;
 
     FirebaseDatabase rtdb;
+    FirebaseAuth auth;
+    DBHandler localdb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +59,12 @@ public class MainActivity extends AppCompatActivity {
         btn_signout = findViewById(R.id.btn_signout);
         btnNewFriend = findViewById(R.id.btn_add_new_friend);
         rvFriendsList = findViewById(R.id.rv_friends_list);
-        adapterAmigos = new FriendsListApdapter();
+
+        friendsAdapter = new FriendsListAdapter();
+        friendsAdapter.setListener(this);
+
         rvFriendsList.setLayoutManager(new LinearLayoutManager(this));
-        rvFriendsList.setAdapter(adapterAmigos);
+        rvFriendsList.setAdapter(friendsAdapter);
         rvFriendsList.setHasFixedSize(true);
 
         btnNewFriend.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +90,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        adapterAmigos.showAllFriends(localdb.getAllFriend());
+        friendsAdapter.showAllFriends(localdb.getAllFriendByUser(auth.getCurrentUser().getUid()));
+    }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onItemClick(Friend friend) {
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        intent.setData(Uri.parse("tel:" + friend.getPhone()));
+        startActivity(intent);
     }
 }

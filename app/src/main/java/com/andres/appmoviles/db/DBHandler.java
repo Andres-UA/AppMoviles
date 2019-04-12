@@ -14,7 +14,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static DBHandler instance = null;
 
     public static final String DB_NAME = "AppMoviles";
-    public static final int DB_VERSION = 1;
+    public static final int DB_VERSION = 2;
 
     // Tabla amigos
     public static final String FRIENDS_TABLE = "friends";
@@ -23,7 +23,8 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String FRIENDS_AGE = "age";
     public static final String FRIENDS_PHONE = "phone";
     public static final String FRIENDS_EMAIL = "email";
-    public static final String CREATE_FRIENDS_TABLE = "CREATE TABLE " + FRIENDS_TABLE + " (" + FRIENDS_ID + " TEXT PRIMARY KEY, " + FRIENDS_NAME + " TEXT, " + FRIENDS_AGE + " TEXT, " + FRIENDS_PHONE + " TEXT, " + FRIENDS_EMAIL + " TEXT )";
+    public static final String FRIENDS_USER_ID = "userid";
+    public static final String CREATE_FRIENDS_TABLE = "CREATE TABLE " + FRIENDS_TABLE + " (" + FRIENDS_ID + " TEXT PRIMARY KEY, " + FRIENDS_NAME + " TEXT, " + FRIENDS_AGE + " TEXT, " + FRIENDS_PHONE + " TEXT, " + FRIENDS_EMAIL + " TEXT, " + FRIENDS_USER_ID + " TEXT )";
 
     public static synchronized DBHandler getInstance(Context context) {
         if (instance == null) {
@@ -53,15 +54,15 @@ public class DBHandler extends SQLiteOpenHelper {
     // Crear
     public void createFriend(Friend friend) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("INSERT INTO " + FRIENDS_TABLE + " (" + FRIENDS_ID + ", " + FRIENDS_NAME + ", " + FRIENDS_AGE + ", " + FRIENDS_PHONE + ", " + FRIENDS_EMAIL + ") VALUES ('" + friend.getId() + "','" + friend.getName() + "','" + friend.getAge() + "','" + friend.getPhone() + "','" + friend.getEmail() + "')");
+        db.execSQL("INSERT INTO " + FRIENDS_TABLE + " (" + FRIENDS_ID + ", " + FRIENDS_NAME + ", " + FRIENDS_AGE + ", " + FRIENDS_PHONE + ", " + FRIENDS_EMAIL + ", " + FRIENDS_USER_ID + " ) VALUES ('" + friend.getId() + "', '" + friend.getName() + "', '" + friend.getAge() + "', '" + friend.getPhone() + "', '" + friend.getEmail() + "', '" + friend.getUserId() + "')");
         db.close();
     }
 
     // Leer
-    public ArrayList<Friend> getAllFriend() {
+    public ArrayList<Friend> getAllFriendByUser(String uid) {
         SQLiteDatabase db = this.getWritableDatabase();
         ArrayList<Friend> friends = new ArrayList<>();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + FRIENDS_TABLE, null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + FRIENDS_TABLE + " WHERE " + FRIENDS_USER_ID + "='" + uid + "'", null);
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
@@ -71,7 +72,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 friend.setAge(cursor.getString(cursor.getColumnIndex(FRIENDS_AGE)));
                 friend.setPhone(cursor.getString(cursor.getColumnIndex(FRIENDS_PHONE)));
                 friend.setEmail(cursor.getString(cursor.getColumnIndex(FRIENDS_EMAIL)));
-
+                friend.setUserId(cursor.getString(cursor.getColumnIndex(FRIENDS_USER_ID)));
                 friends.add(friend);
             } while (cursor.moveToNext());
         }
@@ -79,4 +80,9 @@ public class DBHandler extends SQLiteOpenHelper {
         return friends;
     }
 
+    public void deleteFriendsByUser(String uid) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + FRIENDS_TABLE + " WHERE " + FRIENDS_USER_ID + "='" + uid + "'");
+        db.close();
+    }
 }

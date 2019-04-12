@@ -12,7 +12,7 @@ import com.andres.appmoviles.model.Friend;
 
 import java.util.ArrayList;
 
-public class FriendsListApdapter extends RecyclerView.Adapter<FriendsListApdapter.CustomViewHolder> {
+public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.CustomViewHolder> {
 
     ArrayList<Friend> data;
 
@@ -32,7 +32,7 @@ public class FriendsListApdapter extends RecyclerView.Adapter<FriendsListApdapte
         notifyDataSetChanged();
     }
 
-    public FriendsListApdapter() {
+    public FriendsListAdapter() {
         data = new ArrayList<>();
     }
 
@@ -44,13 +44,13 @@ public class FriendsListApdapter extends RecyclerView.Adapter<FriendsListApdapte
     }
 
     @Override
-    public void onBindViewHolder(CustomViewHolder holder, int position) {
+    public void onBindViewHolder(CustomViewHolder holder, final int position) {
         ((TextView) holder.root.findViewById(R.id.item_list_name)).setText(data.get(position).getName());
         ((TextView) holder.root.findViewById(R.id.item_list_phone)).setText(data.get(position).getPhone());
         holder.root.findViewById(R.id.item_list_call_friend).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                listener.onItemClick(data.get(position));
             }
         });
     }
@@ -60,5 +60,16 @@ public class FriendsListApdapter extends RecyclerView.Adapter<FriendsListApdapte
         return data.size();
     }
 
+    public interface OnItemClickListener {
+        void onItemClick(Friend friend);
+    }
+
+    OnItemClickListener listener;
+
+    public void setListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
 
 }
+
+

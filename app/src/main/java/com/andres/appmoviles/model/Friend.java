@@ -8,17 +8,19 @@ public class Friend {
     private String age; // String porque no voy a realizar operaciones con este dato
     private String phone;
     private String email;
+    private String userId;
 
     // Serializar
     public Friend() {
     }
 
-    public Friend(String id, String name, String age, String phone, String email) {
+    public Friend(String id, String name, String age, String phone, String email, String userId) {
         this.id = id;
         this.name = name;
         this.age = age;
         this.phone = phone;
         this.email = email;
+        this.userId = userId;
     }
 
     public String getId() {
@@ -59,6 +61,14 @@ public class Friend {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     @Override

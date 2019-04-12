@@ -4,55 +4,61 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NewFriendActivity"
-    android:padding="20dp"
+    android:gravity="center"
     android:orientation="vertical"
-    android:gravity="center">
+    android:padding="20dp"
+    tools:context=".NewFriendActivity">
 
     <ImageView
+        android:id="@+id/iv_image_friend"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:background="#ddd"
         android:layout_marginBottom="20dp"
-        android:id="@+id/iv_image_friend"/>
+        android:background="#ddd" />
 
     <Button
+        android:id="@+id/btn_take_pic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tomar"
-        android:id="@+id/btn_take_pic"/>
+        android:text="Tomar" />
+
+    <Button
+        android:id="@+id/btn_open_gallery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Galeria" />
 
     <EditText
+        android:id="@+id/et_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nombre"
-        android:id="@+id/et_name"/>
+        android:hint="Nombre" />
 
     <EditText
+        android:id="@+id/et_age"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Edad"
-        android:inputType="number"
-        android:id="@+id/et_age"/>
+        android:inputType="number" />
 
     <EditText
+        android:id="@+id/et_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Correo electronico"
-        android:inputType="textEmailAddress"
-        android:id="@+id/et_email"/>
+        android:inputType="textEmailAddress" />
 
     <EditText
+        android:id="@+id/et_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Telefono"
-        android:inputType="phone"
-        android:id="@+id/et_phone"/>
+        android:inputType="phone" />
 
     <Button
+        android:id="@+id/btn_save_friend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Guardar"
-        android:id="@+id/btn_save_friend"/>
+        android:text="Guardar" />
 
 </LinearLayout>

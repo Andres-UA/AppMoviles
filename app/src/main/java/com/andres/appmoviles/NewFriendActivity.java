@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.andres.appmoviles.Util.Utils;
 import com.andres.appmoviles.db.DBHandler;
 import com.andres.appmoviles.model.Friend;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,6 +32,8 @@ import java.util.UUID;
 public class NewFriendActivity extends AppCompatActivity {
 
     private static final int CAMERA_CALLBACK_ID = 100;
+    public static final int GALLEY_CALLBACK_ID = 101;
+
     private EditText etName;
     private EditText etAge;
     private EditText etEmail;
@@ -39,6 +42,9 @@ public class NewFriendActivity extends AppCompatActivity {
 
     private Button btnSaveFriend;
     private Button btnTakePic;
+    private Button btnOpenGallery;
+
+    private boolean saveFlag = false;
 
     private File photoFile;
 
@@ -47,7 +53,7 @@ public class NewFriendActivity extends AppCompatActivity {
     DBHandler db;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_friend);
 
@@ -70,7 +76,7 @@ public class NewFriendActivity extends AppCompatActivity {
         btnSaveFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Friend friend = new Friend(UUID.randomUUID().toString(), etName.getText().toString(), etAge.getText().toString(), etPhone.getText().toString(), etEmail.getText().toString());
+                Friend friend = new Friend(UUID.randomUUID().toString(), etName.getText().toString(), etAge.getText().toString(), etPhone.getText().toString(), etEmail.getText().toString(), auth.getCurrentUser().getUid());
 
                 // Agregar amigo a DB local
                 db.createFriend(friend);
@@ -79,6 +85,7 @@ public class NewFriendActivity extends AppCompatActivity {
                 String uid = auth.getCurrentUser().getUid();
                 rtdb.getReference().child("friends").child(uid).push().setValue(friend);
 
+                saveFlag = true;
                 finish();
 
             }
@@ -97,14 +104,31 @@ public class NewFriendActivity extends AppCompatActivity {
             }
         });
 
+        btnOpenGallery = findViewById(R.id.btn_open_gallery);
+        btnOpenGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                startActivityForResult(intent, GALLEY_CALLBACK_ID);
+            }
+        });
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         // Luego de tomar la foto y guardarla
         if (requestCode == CAMERA_CALLBACK_ID && resultCode == RESULT_OK) {
-            Bitmap imagen = BitmapFactory.decodeFile(photoFile.toString());
-            ivPicture.setImageBitmap(imagen);
+            Bitmap image = BitmapFactory.decodeFile(photoFile.toString());
+            ivPicture.setImageBitmap(image);
+        }
+        if (requestCode == GALLEY_CALLBACK_ID && requestCode == RESULT_OK) {
+            Uri uri = data.getData();
+            photoFile = new File(Utils.getPath(this, uri));
+            Bitmap image = BitmapFactory.decodeFile(photoFile.toString());
+            ivPicture.setImageBitmap(image);
         }
     }
 
@@ -129,10 +153,23 @@ public class NewFriendActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        sharedPreferences.edit().putString("name", etName.getText().toString())
+        sharedPreferences.edit()
+                .putString("name", etName.getText().toString())
                 .putString("age", etAge.getText().toString())
                 .putString("phone", etPhone.getText().toString())
                 .putString("email", etEmail.getText().toString())
                 .apply();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (saveFlag) {
+            PreferenceManager.getDefaultSharedPreferences(this).edit()
+                    .remove("name")
+                    .remove("age")
+                    .remove("phone")
+                    .remove("email");
+        }
     }
 }
